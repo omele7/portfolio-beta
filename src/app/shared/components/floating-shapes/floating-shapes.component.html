@@ -1,0 +1,12 @@
+<div class="floating-shapes-container z-10">
+    <div *ngFor="let shape of shapes" 
+        class="floating-shape" 
+        [ngStyle]="{
+            'top': shape.y + 'px',
+            'left': shape.x + 'px',
+            'width': shape.size + 'px',
+            'height': shape.size + 'px',
+            'background-color': shape.color
+        }">
+    </div>
+</div>
