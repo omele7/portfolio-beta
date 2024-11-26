@@ -9,11 +9,18 @@ import { RouterLink } from '@angular/router';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
+
 export class SidebarComponent {
   @Input() isVisible = false;
   @Output() close = new EventEmitter<void>();
+  isClosing = false;
 
   closeSidebar() {
-    this.close.emit();
+    this.isClosing = true;
+    setTimeout(() => {
+      this.isClosing = false;
+      this.isVisible = false;
+      this.close.emit();
+    }, 300);
   }
 }

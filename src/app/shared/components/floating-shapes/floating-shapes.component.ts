@@ -9,7 +9,10 @@ interface Shape {
   dy: number;
   size: number;
   color: string;
+  type: 'icosahedron' | 'dodecahedron' | 'pentagon';
+  rotation: number;
 }
+
 
 @Component({
   selector: 'app-floating-shapes',
@@ -28,40 +31,74 @@ export class FloatingShapesComponent {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.containerWidth = window.innerWidth;
-      this.containerHeight = window.innerHeight;
-
-      this.createShapes(10);
+      this.containerHeight = document.documentElement.scrollHeight;
+  
+      this.createShapes(15);
       this.animateShapes();
+  
+      window.addEventListener('resize', this.onResize.bind(this));
+    }
+  }
+  
+  onResize() {
+    this.containerWidth = window.innerWidth;
+    this.containerHeight = document.documentElement.scrollHeight;
+  
+    this.shapes = [];
+    this.createShapes(15);
+  }
+
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', this.onResize.bind(this));
     }
   }
 
   createShapes(count: number) {
+    const centerX = this.containerWidth / 2;
+    const centerY = this.containerHeight / 2;
+  
+    const types: Array<Shape['type']> = ['icosahedron', 'dodecahedron', 'pentagon'];
+  
     for (let i = 0; i < count; i++) {
       this.shapes.push({
-        x: Math.random() * this.containerWidth,
-        y: Math.random() * this.containerHeight,
-        dx: (Math.random() - 0.5) * 4,
-        dy: (Math.random() - 0.5) * 4,
+        x: centerX,
+        y: centerY,
+        dx: (Math.random() - 0.5) * 10,
+        dy: (Math.random() - 0.5) * 10,
         size: Math.random() * 50 + 20,
         color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+        type: types[Math.floor(Math.random() * types.length)],
+        rotation: 2,
       });
     }
   }
 
   animateShapes() {
-  setInterval(() => {
-    this.shapes.forEach((shape) => {
-      shape.x += shape.dx;
-      shape.y += shape.dy;
-
-      if (shape.x <= 0 || shape.x + shape.size >= this.containerWidth) {
-        shape.dx *= -1;
-      }
-
-      if (shape.y <= 0 || shape.y + shape.size >= this.containerHeight) {
-        shape.dy *= -1;
-      }
-    });
-  }, 10);
-}
+    setInterval(() => {
+      this.shapes.forEach((shape) => {
+        shape.x += shape.dx;
+        shape.y += shape.dy;
+  
+        if (shape.x <= 40 || shape.x + shape.size >= this.containerWidth - 40) {
+          shape.dx *= -1;
+          shape.rotation += 1;
+        }
+  
+        if (shape.y <= 40 || shape.y + shape.size >= this.containerHeight - 40) {
+          shape.dy *= -1;
+          shape.rotation += 1;
+        }
+  
+        shape.rotation += 0.5;
+  
+        if (shape.rotation >= 360) {
+          shape.rotation = 0;
+        }
+      });
+    }, 10);
+  }
+  
+  
+  
 }

@@ -1,6 +1,6 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
@@ -13,6 +13,8 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 export class HeaderComponent implements OnInit {
   isSidebarVisible = false;
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   ngOnInit() {
     this.checkScreenSize();
   }
@@ -23,9 +25,11 @@ export class HeaderComponent implements OnInit {
   }
 
   checkScreenSize() {
-    const width = window.innerWidth;
-    if (width >= 768 && this.isSidebarVisible) {
-      this.isSidebarVisible = false;
+    if (isPlatformBrowser(this.platformId)) {
+      const width = window.innerWidth;
+      if (width >= 768 && this.isSidebarVisible) {
+        this.isSidebarVisible = false;
+      }
     }
   }
 
