@@ -82,8 +82,3 @@ header {
     position: relative;
     z-index: 100;
 }
-
-.floating-shapes {
-    position: absolute;
-    z-index: 1;
-}

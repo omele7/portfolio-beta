@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { FloatingShapesComponent } from '../../shared/components/floating-shapes/floating-shapes.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [FloatingShapesComponent],
+  imports: [],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

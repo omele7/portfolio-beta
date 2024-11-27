@@ -14,8 +14,15 @@ export class SidebarComponent {
   @Input() isVisible = false;
   @Output() close = new EventEmitter<void>();
   isClosing = false;
+  isSpinning = false;
 
-  closeSidebar() {
+  closeSidebar(isButtonClick: boolean = false) {
+    if (isButtonClick) {
+      this.isSpinning = true;
+      setTimeout(() => {
+        this.isSpinning = false;
+      }, 100);
+    }
     this.isClosing = true;
     setTimeout(() => {
       this.isClosing = false;
